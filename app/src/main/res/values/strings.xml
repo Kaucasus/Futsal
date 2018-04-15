@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Futsal</string>
+    <string name="welcome_message">Welkom aan de pre-pre-pre-alpha van de futsal app.</string>
+    <string name="start_prompt">Om te beginnen druk op de grote start knop. Zoals te verwachten.</string>
+    <string name="start">START</string>
+    <string name="next">CONTINUE</string>
+    <string name="add_player">ADD PLAYER</string>
+    <string name="added_players">Added players, don\'t add keeper</string>
+    <string name="substitution_match_explanation">Substitutions: all at 5 mins</string>
+    <string name="in">IN</string>
+    <string name="out">OUT</string>
+</resources>
