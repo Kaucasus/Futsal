@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import be.kuleuven.softdev.jordi.futsal.listadapters.PlayerListAdapter;
+
 public class AddPlayers extends AppCompatActivity {
     private ArrayList<String> playerList;
     private ArrayList<String> starterPlayers;
@@ -84,8 +86,7 @@ public class AddPlayers extends AppCompatActivity {
                     playerList.add("f");
                     playerList.add("g");
                     playerList.add("h");
-                }
-                if(newPlayer.trim().length() > 0 && !playerList.contains(newPlayer))
+                }else if(newPlayer.trim().length() > 0 && !playerList.contains(newPlayer))
                 {
                     playerList.add(newPlayer);
 

@@ -8,6 +8,10 @@ import android.support.v7.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import be.kuleuven.softdev.jordi.futsal.classes.Field;
+import be.kuleuven.softdev.jordi.futsal.classes.Substitution;
+import be.kuleuven.softdev.jordi.futsal.listadapters.SubstitutionListAdapter;
+
 public class ActiveMatch extends AppCompatActivity {
     ArrayList<String> playerList;
     ArrayList<Substitution> substitutions;
