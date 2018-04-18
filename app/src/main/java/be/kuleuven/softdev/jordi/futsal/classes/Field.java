@@ -9,17 +9,10 @@ public class Field {
     private ArrayList<Player> fieldPlayers;
     private ArrayList<Player> benchPlayers;
     private int size;
-
-    public ArrayList<Player> getFieldPlayers() {
-        return fieldPlayers;
-    }
-
-    public ArrayList<Player> getBenchPlayers() {
-        return benchPlayers;
-    }
-
     private int gameLength;
     private int subLength;
+
+
 
 
     public Field(ArrayList<String> playerList, int gameLength, int subLength) {
@@ -40,31 +33,17 @@ public class Field {
         }
     }
 
-    private void substitute(Substitution substitution) {
-        ArrayList<Player> subIn = substitution.getIn();
-        ArrayList<Player> subOut = substitution.getOut();
-        benchPlayers.addAll(subOut);
-        fieldPlayers.addAll(subIn);
-        Iterator<Player> fieldit = fieldPlayers.iterator();
-        Iterator<Player> benchit = benchPlayers.iterator();
-
-        while (benchit.hasNext()) {
-            Player currentPlayer = benchit.next();
-            if (subIn.contains(currentPlayer)) {
-                benchit.remove();
-            }
-
-        }
-
-        while (fieldit.hasNext()) {
-            Player currentPlayer = fieldit.next();
-            if (subOut.contains(currentPlayer)) {
-                fieldit.remove();
-            }
-        }
-
+    //Getters and Setters
+    public ArrayList<Player> getFieldPlayers() {
+        return fieldPlayers;
     }
 
+    public ArrayList<Player> getBenchPlayers() {
+        return benchPlayers;
+    }
+
+
+    //Main Methods
 
     public ArrayList<Substitution> generateSubstitutions() {
 
@@ -73,63 +52,100 @@ public class Field {
         if (size != fieldPlayers.size()) {
             int subAmount = (gameLength / subLength) - 1;
 
-            //if(playerList.size()%2 !=0) {
 
             for (int i = 0; i < subAmount; i++) {
                 ArrayList<Player> in;
                 ArrayList<Player> out;
-                in = getPlayCount(2, benchPlayers, true);
-                out = getPlayCount(2, fieldPlayers, false);
-
-                Substitution substitution = new Substitution(in, out);
-                substitutions.add(substitution);
-                substitute(substitution);
 
                 //IncrementPlaytime
                 for (Player player : fieldPlayers) {
                     player.incrementPlayTime();
                 }
 
+                in = getPlayCount(2, benchPlayers, false);
+                out = getPlayCount(2, fieldPlayers, true);
+
+                Substitution substitution = new Substitution(in, out);
+                substitutions.add(substitution);
+                substitute(substitution);
+
+
+
             }
 
-//            }else
-//            {
-//
-//                for (int i = 0; i < subAmount; i++)
-//                {
-//
-//                }
-//
-//            }
         }
         return substitutions;
     }
 
 
-private ArrayList<Player> getPlayCount(int amount, ArrayList<Player> list, boolean in) {
-        if (amount >= list.size()) {
-            return list;
-        } else {
-            ArrayList<Player> countList = new ArrayList<>();
-            //Sorter
-            Collections.sort(list, new playerListComparator());
+    //Private helper Methods
 
-            if(in)
-            {
-                Collections.reverse(list);
+    private void substitute(Substitution substitution) {
+
+        ArrayList<Player> subIn = substitution.getIn();
+        ArrayList<Player> subOut = substitution.getOut();
+
+        benchPlayers.addAll(subOut);
+        fieldPlayers.addAll(subIn);
+
+        Iterator<Player> fieldIt = fieldPlayers.iterator();
+        Iterator<Player> benchIt = benchPlayers.iterator();
+
+        while (benchIt.hasNext()) {
+
+            Player currentPlayer = benchIt.next();
+
+            if (subIn.contains(currentPlayer)) {
+                benchIt.remove();
             }
 
-            for (int i = 0; i < amount; i++) {
-                countList.add(list.get(i));
+        }
+
+        while (fieldIt.hasNext()) {
+
+            Player currentPlayer = fieldIt.next();
+
+            if (subOut.contains(currentPlayer)) {
+                fieldIt.remove();
             }
-
-
-            return countList;
         }
 
     }
 
 
+
+
+
+    private ArrayList<Player> getPlayCount(int amount, ArrayList<Player> list, boolean out) {
+
+        if (amount >= list.size()) {
+            return list;
+
+        } else {
+            ArrayList<Player> copyList = new ArrayList<>();
+            ArrayList<Player> outList = new ArrayList<>();
+            copyList.addAll(list);
+
+            //Sorter
+            Collections.sort(copyList, new playerListComparator());
+
+            if(out)
+            {
+                Collections.reverse(copyList);
+            }
+
+            for (int i = 0; i < amount; i++) {
+                outList.add(copyList.get(i));
+            }
+
+
+
+            return outList;
+        }
+
+    }
+
+// Additional helper classes
 
     class playerListComparator implements Comparator<Player> {
         @Override

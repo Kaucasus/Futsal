@@ -24,6 +24,8 @@ public class ExampleUnitTest {
 
     @Test
     public void FieldTest() {
+        //8 players
+
         //Create an ArrayList of 8 players for field
         ArrayList<String> SampleArray = new ArrayList<>();
         SampleArray.add(("a"));
@@ -42,6 +44,7 @@ public class ExampleUnitTest {
         veld.generateSubstitutions();
 
         int lowest = Integer.MAX_VALUE;
+        int highest = Integer.MIN_VALUE;
 
         ArrayList<Player> spelers = new ArrayList<>();
         spelers.addAll(veld.getBenchPlayers());
@@ -51,10 +54,55 @@ public class ExampleUnitTest {
         {
             if(speler.getPlayTime() < lowest)
             {lowest = speler.getPlayTime();}
+            if(speler.getPlayTime() > highest){highest = speler.getPlayTime();}
         }
 
-        assert(lowest > 1);
 
+        //8 players means that the max difference 5 mins is now. Need to improve the alg.
+        //Theoretically it should be possible to have a max delta of 0 mins.
+        assert(lowest > 1);
+        assert(lowest > highest/2);
+        assert(lowest > highest-2);
+
+        //7 players
+        //Create an ArrayList of 7 players for field
+        ArrayList<String> SampleArray7 = new ArrayList<>();
+        SampleArray7.add(("a"));
+        SampleArray7.add(("b"));
+        SampleArray7.add(("c"));
+        SampleArray7.add(("d"));
+        SampleArray7.add(("e"));
+        SampleArray7.add(("f"));
+        SampleArray7.add(("g"));
+
+
+        ArrayList<Substitution> substitutions7 = new ArrayList<>();
+
+
+        Field veld7 = new Field(SampleArray,50,5);
+        veld.generateSubstitutions();
+
+        int lowest7 = Integer.MAX_VALUE;
+        int highest7 = Integer.MIN_VALUE;
+
+        ArrayList<Player> spelers7 = new ArrayList<>();
+        spelers7.addAll(veld.getBenchPlayers());
+        spelers7.addAll(veld.getFieldPlayers());
+
+        for (Player speler: spelers7)
+        {
+            if(speler.getPlayTime() < lowest7)
+            {lowest7 = speler.getPlayTime();}
+            if(speler.getPlayTime() > highest7){highest7 = speler.getPlayTime();}
+        }
+
+        assert(lowest7 > 1);
+        assert(lowest7 > highest7/2);
+        //7 players means that the max difference 10 mins is now. Need to improve the alg.
+        //Theoretically it should be possible to have a max delta of 5 mins.
+        assert(lowest7 > highest7-3);
+
+        //6 players
         }
 
 }

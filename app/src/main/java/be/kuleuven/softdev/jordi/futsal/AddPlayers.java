@@ -78,14 +78,14 @@ public class AddPlayers extends AppCompatActivity {
                 String newPlayer = input.getText().toString();
                 if(newPlayer.equals("a"))
                 {
-                    playerList.add("a");
-                    playerList.add("b");
-                    playerList.add("c");
-                    playerList.add("d");
-                    playerList.add("e");
-                    playerList.add("f");
-                    playerList.add("g");
-                    playerList.add("h");
+                    playerList.add("Jordi");
+                    playerList.add("JonasDV");
+                    playerList.add("JonasB");
+                    playerList.add("Arti");
+                    playerList.add("Marten");
+                    playerList.add("Milo");
+                    playerList.add("Barry");
+                    playerList.add("Sandro");
                 }else if(newPlayer.trim().length() > 0 && !playerList.contains(newPlayer))
                 {
                     playerList.add(newPlayer);
