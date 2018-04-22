@@ -54,6 +54,7 @@ public class Field {
 
 
             for (int i = 0; i < subAmount; i++) {
+                int time = (i+1)*subLength;
                 ArrayList<Player> in;
                 ArrayList<Player> out;
 
@@ -65,7 +66,7 @@ public class Field {
                 in = getPlayCount(2, benchPlayers, false);
                 out = getPlayCount(2, fieldPlayers, true);
 
-                Substitution substitution = new Substitution(in, out);
+                Substitution substitution = new Substitution(in, out, time);
                 substitutions.add(substitution);
                 substitute(substitution);
 

@@ -1,5 +1,6 @@
 package be.kuleuven.softdev.jordi.futsal;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
@@ -76,17 +77,7 @@ public class AddPlayers extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String newPlayer = input.getText().toString();
-                if(newPlayer.equals("a"))
-                {
-                    playerList.add("Jordi");
-                    playerList.add("JonasDV");
-                    playerList.add("JonasB");
-                    playerList.add("Arti");
-                    playerList.add("Marten");
-                    playerList.add("Milo");
-                    playerList.add("Barry");
-                    playerList.add("Sandro");
-                }else if(newPlayer.trim().length() > 0 && !playerList.contains(newPlayer))
+                if(newPlayer.trim().length() > 0 && !playerList.contains(newPlayer))
                 {
                     playerList.add(newPlayer);
 
@@ -122,6 +113,26 @@ public class AddPlayers extends AppCompatActivity {
         }
 
     }
+
+    public void addExistingPlayer(View view) {
+
+
+
+/*
+            playerList.add("Jordi");
+            playerList.add("JonasDV");
+            playerList.add("JonasB");
+            playerList.add("Arti");
+            playerList.add("Marten");
+            playerList.add("Milo");
+            playerList.add("Barry");
+            playerList.add("Sandro");*/
+
+    }
+
+
+
+
 
 
  /*   public void dialogChooseStarters()

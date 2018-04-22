@@ -23,6 +23,7 @@ public class SubstitutionListAdapter extends
         public TextView inText2;
         public TextView outText1;
         public TextView outText2;
+        public TextView timeText;
 
         public SubstitionViewHolder(View view) {
             super(view);
@@ -30,6 +31,8 @@ public class SubstitutionListAdapter extends
             inText2 = (TextView) view.findViewById(R.id.in_2);
             outText1 = (TextView) view.findViewById(R.id.out_1);
             outText2 = (TextView) view.findViewById(R.id.out_2);
+            timeText = (TextView) view.findViewById(R.id.time);
+
 
         }
     }
@@ -45,6 +48,7 @@ public class SubstitutionListAdapter extends
         holder.inText2.setText(substitution.getIn().get(1).getName());
         holder.outText1.setText(substitution.getOut().get(0).getName());
         holder.outText2.setText(substitution.getOut().get(1).getName());
+        holder.timeText.setText(String.valueOf(substitution.getTime()));
     }
 
     @Override
