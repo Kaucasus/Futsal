@@ -3,7 +3,6 @@
     package="be.kuleuven.softdev.jordi.futsal">
 
     <application
-
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -18,7 +17,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".ActiveMatch" />
-        <activity android:name=".AddPlayers"/>
+        <activity android:name=".AddPlayers" />
+        <activity android:name=".Statistics" />
+        <activity android:name=".Upload" />
+        <activity android:name=".DetailedMatch"></activity>
     </application>
 
 </manifest>

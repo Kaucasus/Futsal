@@ -46,6 +46,7 @@ public class Field {
     //Main Methods
 
     public ArrayList<Substitution> generateSubstitutions() {
+        //Todo make a better algorithm
 
         ArrayList<Substitution> substitutions = new ArrayList<>();
 
@@ -123,9 +124,8 @@ public class Field {
             return list;
 
         } else {
-            ArrayList<Player> copyList = new ArrayList<>();
             ArrayList<Player> outList = new ArrayList<>();
-            copyList.addAll(list);
+            ArrayList<Player> copyList = new ArrayList<>(list);
 
             //Sorter
             Collections.sort(copyList, new playerListComparator());

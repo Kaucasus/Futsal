@@ -63,6 +63,8 @@ public class AddPlayers extends AppCompatActivity {
 
     private void dialogAddPlayer() {
 
+        //Todo: split this up via a dialogfragment to have a cleaner build
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add player here!");
 

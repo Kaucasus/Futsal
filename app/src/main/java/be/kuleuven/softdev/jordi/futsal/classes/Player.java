@@ -1,6 +1,6 @@
 package be.kuleuven.softdev.jordi.futsal.classes;
 
-import java.util.Objects;
+
 
 public class Player {
     private String name;
