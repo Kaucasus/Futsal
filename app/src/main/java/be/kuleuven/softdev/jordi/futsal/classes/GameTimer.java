@@ -1,4 +1,5 @@
 package be.kuleuven.softdev.jordi.futsal.classes;
+//Todo make and understand a handler
 
 
 

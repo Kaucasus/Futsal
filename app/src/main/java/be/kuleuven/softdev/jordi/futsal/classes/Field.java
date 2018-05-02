@@ -1,4 +1,6 @@
 package be.kuleuven.softdev.jordi.futsal.classes;
+//Todo: write documentation
+//Todo: make the constructor accept an arraylist of Players instead of players.
 
 import java.util.ArrayList;
 import java.util.Collections;

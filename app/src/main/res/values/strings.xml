@@ -10,4 +10,7 @@
     <string name="in">IN</string>
     <string name="out">OUT</string>
     <string name="existing_player">EXISTING PLAYER</string>
+    <string name="home_team_goal_add">new goal</string>
+    <string name="opponent_team_goal_add">opponent</string>
+    <string name="add_substitution">Add sub</string>
 </resources>
