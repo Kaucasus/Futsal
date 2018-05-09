@@ -10,20 +10,23 @@ import java.util.Iterator;
 public class Field {
     private ArrayList<Player> fieldPlayers;
     private ArrayList<Player> benchPlayers;
+    private ArrayList<Substitution> substituteList;
     private int size;
     private int gameLength;
     private int subLength;
-
+    private int halftime;
 
 
 
     public Field(ArrayList<String> playerList, int gameLength, int subLength) {
         this.gameLength = gameLength;
         this.subLength = subLength;
+        halftime = gameLength/2;
         size = playerList.size();
 
         fieldPlayers = new ArrayList<>();
         benchPlayers = new ArrayList<>();
+
 
         //First four in the playerList are the first fieldPlayers
         //The rest is in the benchPlayers
@@ -33,6 +36,8 @@ public class Field {
         for (int i = 4; i < playerList.size(); i++) {
             benchPlayers.add(new Player(playerList.get(i)));
         }
+
+        substituteList = generateSubstitutions();
     }
 
     //Getters and Setters
@@ -44,10 +49,22 @@ public class Field {
         return benchPlayers;
     }
 
+    public ArrayList<Substitution> getSubstituteList() {
+        return substituteList;
+    }
+
+    public int getHalftime() {
+        return halftime;
+    }
+
 
     //Main Methods
 
-    public ArrayList<Substitution> generateSubstitutions() {
+
+
+
+    //Private helper Methods
+    private ArrayList<Substitution> generateSubstitutions() {
         //Todo make a better algorithm
 
         ArrayList<Substitution> substitutions = new ArrayList<>();
@@ -80,9 +97,6 @@ public class Field {
         }
         return substitutions;
     }
-
-
-    //Private helper Methods
 
     private void substitute(Substitution substitution) {
 

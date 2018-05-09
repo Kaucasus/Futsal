@@ -18,4 +18,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+
+    public void handlerTest(View view) {
+        Intent intent = new Intent(this, HandlerTest.class);
+        startActivity(intent);
+    }
+
+
 }

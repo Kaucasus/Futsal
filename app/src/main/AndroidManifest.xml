@@ -20,7 +20,10 @@
         <activity android:name=".AddPlayers" />
         <activity android:name=".Statistics" />
         <activity android:name=".Upload" />
-        <activity android:name=".DetailedMatch"></activity>
+        <activity android:name=".DetailedMatch" />
+        <activity android:name=".HandlerTest" />
+
+
     </application>
 
 </manifest>

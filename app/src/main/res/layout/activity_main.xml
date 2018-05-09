@@ -34,6 +34,11 @@
             android:id="@+id/startButton"
             android:onClick="start"
             />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="HandlerTest"
+            android:onClick="handlerTest"/>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

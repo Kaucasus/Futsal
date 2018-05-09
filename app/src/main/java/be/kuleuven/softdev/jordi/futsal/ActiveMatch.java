@@ -33,7 +33,9 @@ public class ActiveMatch extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    public TextView mTimer = (TextView) findViewById(R.id.timer);
+    private TextView mTimer = (TextView) findViewById(R.id.timer);
+    //private final TimerHandler th = new TimerHandler(this);
+
 
 
 
@@ -59,7 +61,7 @@ public class ActiveMatch extends AppCompatActivity {
 
         //Create substitution List and display it
         substitutions = new ArrayList<>();
-        substitutions = field.generateSubstitutions();
+        substitutions = field.getSubstituteList();
 
 
         //Setup views
@@ -86,20 +88,10 @@ public class ActiveMatch extends AppCompatActivity {
 
         //create new handler to update the UI every second. And to see  the value.
 
-        //final TimerHandler th = new TimerHandler(Looper.getMainLooper());
+        //th = new TimerHandler(Looper.getMainLooper());
         //th.sendEmptyMessage(1);
 
-        final Handler timerHandler = new Handler();
-        timerHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                long time = System.currentTimeMillis()-startTime;
-                String timeString = (time / (1000*60)) % 60 + " : " + (time / 1000)%60;
-                mTimer.setText(timeString);
 
-                timerHandler.postDelayed(this, 1000)
-            }
-        })
 
 
 
@@ -122,6 +114,11 @@ public class ActiveMatch extends AppCompatActivity {
     }
 
     public void addSubstitute(View view) {
+    }
+
+    public void updateTimer(String time)
+    {
+        mTimer.setText(time);
     }
 
 
