@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array
+        name="known_players">
+        <item>Matthi</item>
+        <item>Jordi</item>
+        <item>Arthur</item>
+        <item>Djonko</item>
+        <item>Jonas D</item>
+        <item>Robin</item>
+        <item>Barry</item>
+        <item>Sandro</item>
+        <item>Marten</item>
+        <item>Jonas B</item>
+        <item>Ruben</item>
+        <item>Jannes</item>
+    </string-array>
+
+</resources>

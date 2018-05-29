@@ -18,6 +18,7 @@ public class SubstitutionListAdapter extends
     /**
      * View holder class
      * */
+    // TODO: add a way for multiple substitutes (not implemented)
     public class SubstitionViewHolder extends RecyclerView.ViewHolder {
         public TextView inText1;
         public TextView inText2;

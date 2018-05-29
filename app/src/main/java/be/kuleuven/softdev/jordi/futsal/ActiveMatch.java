@@ -1,79 +1,98 @@
 package be.kuleuven.softdev.jordi.futsal;
-//Todo make an AlarmManager that can call whenever there is a substitute coming up
-//Todo implement a way so you can add substitutes and something that you can ok a substitution
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Looper;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import be.kuleuven.softdev.jordi.futsal.classes.Field;
-import be.kuleuven.softdev.jordi.futsal.classes.GameTimer;
-import be.kuleuven.softdev.jordi.futsal.classes.Score;
-import be.kuleuven.softdev.jordi.futsal.classes.Substitution;
+import be.kuleuven.softdev.jordi.futsal.classes.Goal;
+import be.kuleuven.softdev.jordi.futsal.classes.Match;
+import be.kuleuven.softdev.jordi.futsal.classes.Player;
 import be.kuleuven.softdev.jordi.futsal.handlers.TimerHandler;
+import be.kuleuven.softdev.jordi.futsal.listadapters.RecyclerItemClickListener;
+import be.kuleuven.softdev.jordi.futsal.listadapters.SpinnerItemClickListener;
 import be.kuleuven.softdev.jordi.futsal.listadapters.SubstitutionListAdapter;
 
 public class ActiveMatch extends AppCompatActivity {
-    ArrayList<String> playerList;
-    ArrayList<Substitution> substitutions;
-    GameTimer gameTimer;
-    Field field;
-    Score score;
+    Match match;
     int gameLength = 50;
     int subLength = 5;
-    long startTime = System.currentTimeMillis();
+    int notificationID;
+    boolean active;
+
+    //Views
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private TextView mTimer = (TextView) findViewById(R.id.timer);
-    //private final TimerHandler th = new TimerHandler(this);
 
-
-
+    //Handler
+    public TimerHandler th;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_active_match);
-
         Intent intent = getIntent();
-        playerList = intent.getStringArrayListExtra("playerList");
 
-        //Setup classes
+        //get the players selected in previous screen
+        ArrayList<Player> playerList;
+        playerList = intent.getParcelableArrayListExtra("playerList");
 
-        //Create new gameField to get the substitutions
-        //Todo: make the field constructor accept an arraylist of Players instead of players.
+        active = true;
 
-        field = new Field(playerList,gameLength,subLength);
-        score = new Score(0,0,0);
-        gameTimer = new GameTimer();
+        //Set timer prompt
+        TextView mTimer = (TextView) findViewById(R.id.timer);
+        mTimer.setText(R.string.timer_start_prompt);
 
+        //create new handler to update the UI every second. And to see  the value.
+        th = new TimerHandler(this);
+        th.sendEmptyMessage(TimerHandler.DO_UPDATE_TIMER);
 
-
-
-        //Create substitution List and display it
-        substitutions = new ArrayList<>();
-        substitutions = field.getSubstituteList();
+        //Create new match
+        match = new Match(playerList,gameLength,subLength);
 
 
         //Setup views
-
-
-
         TextView mScoreBoard = (TextView) findViewById(R.id.scoreboard);
-        mScoreBoard.setText(score.scoreBoardString());
+        mScoreBoard.setText(match.getScore().scoreBoardString());
 
         //setup recyclerView
         mRecyclerView = (RecyclerView) findViewById(R.id.substitution_recycler_view);
 
+
+        //via: https://stackoverflow.com/questions/24471109/recyclerview-onclick#26196831
+        mRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(this, mRecyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        ;
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) {
+                        if (position == 0){
+                        match.substituteFirstSubstitution();
+                        mAdapter.notifyDataSetChanged();
+                        th.setNotificationFired(false);
+                        Toast.makeText(ActiveMatch.this, "removed substitution", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(ActiveMatch.this, "select the newest substitution", Toast.LENGTH_SHORT).show();
+                        }
+                        
+
+                    }
+                })
+        );
         // Use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
@@ -83,45 +102,166 @@ public class ActiveMatch extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new SubstitutionListAdapter(substitutions);
+        mAdapter = new SubstitutionListAdapter(match.getSubstitutions());
         mRecyclerView.setAdapter(mAdapter);
 
-        //create new handler to update the UI every second. And to see  the value.
-
-        //th = new TimerHandler(Looper.getMainLooper());
-        //th.sendEmptyMessage(1);
-
-
-
-
-
+        //give the notification ID
+        notificationID = 0;
     }
 
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(this, "Can't go back, match in progress", Toast.LENGTH_SHORT).show();
+    }
 
+    //On click methods
     public void homeScored(View view) {
-        //Todo: create dialogFragment where you can put goal
+        if(!th.isPaused()) {
+            // TODO: 5/29/18 pick players who scored via spinner
 
 
-        TextView mScoreBoard = (TextView) findViewById(R.id.scoreboard);
-        mScoreBoard.setText(score.scoreBoardString());
+            //AlertDialog:
+            LayoutInflater li = getLayoutInflater();
+            View alertLayout = li.inflate(R.layout.alert_dialog_goal_scored, null);
+            final Spinner goalmaker = alertLayout.findViewById(R.id.goalmaker_spinner);
+            goalmaker.setOnItemSelectedListener(new SpinnerItemClickListener());
+            final Spinner assister = alertLayout.findViewById(R.id.assister_spinner);
+            assister.setOnItemSelectedListener(new SpinnerItemClickListener());
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setTitle("Goal scored")
+                    .setView(alertLayout)
+                    .setCancelable(false)
+                    .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+            alert.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    match.updateScore(true, th.getTime());
+                    match.addGoal(new Goal(match.getFieldPlayers().get(0), match.getFieldPlayers().get(1)
+                            , th.getTime(), match.getScore()));
+                }
+            });
+            AlertDialog dialog = alert.create();
+            dialog.show();
+
+
+            TextView mScoreBoard = (TextView) findViewById(R.id.scoreboard);
+            mScoreBoard.setText(match.getScore().scoreBoardString());
+        }
     }
 
     public void opponentScored(View view) {
+        if(!th.isPaused()){
+            //Goals of opponents don't get tracked
 
-        score.incrementOut();
-        TextView mScoreBoard = (TextView) findViewById(R.id.scoreboard);
-        mScoreBoard.setText(score.scoreBoardString());
+            match.updateScore(false,th.getTime());
+            TextView mScoreBoard = (TextView) findViewById(R.id.scoreboard);
+            mScoreBoard.setText(match.getScore().scoreBoardString());
+        }
     }
 
     public void addSubstitute(View view) {
+        Toast.makeText(this, "on the fly substitution not allowed", Toast.LENGTH_SHORT).show();
     }
 
-    public void updateTimer(String time)
+    public void pause(View view) {
+        if(active) {
+            th.sendEmptyMessage(TimerHandler.DO_TOGGLE_TIMER);
+            Toast.makeText(this, (th.isPaused() ? "continued timer" : "stopped timer"), Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Intent intent = new Intent(this, Statistics.class);
+            intent.putParcelableArrayListExtra("goals", match.getGoals());
+            startActivity(intent);
+        }
+
+    }
+
+    public void endGame()
     {
-        mTimer.setText(time);
+        Toast.makeText(this, "Game ended", Toast.LENGTH_SHORT).show();
+        active = false;
+
+    }
+    
+    public void halftime() {
+        Toast.makeText(this, "Half Time", Toast.LENGTH_SHORT).show();
+    }
+    //Methods to make the timing work
+
+    public void updateUI(String time) {
+        TextView timerView = (TextView) findViewById(R.id.timer);
+        timerView.setText(time);
+    }
+
+    public boolean checkTimeSubstitution(long time)
+    {
+        //time is in seconds
+        boolean check = false;
+        // TODO: 5/29/18 alter this for  demo (%60 instead of /60)
+        long minutes = (time/60);
+
+        if(match.getSubstitutions().size()>0 && match.getSubstitutions().get(0).getTime() < minutes)
+        {
+            check = true;
+        }
+
+        return check;
+    }
+
+    public boolean checkHalfTime(long time)
+    {
+        //time is in seconds
+        boolean check = false;
+        // TODO: 5/29/18 Alter this for demo (%60 instead of /60)
+        long minutes = (time/60);
+        if(minutes==gameLength/2){
+            check = true;
+        }
+        return check;
+    }
+
+    public boolean checkFullTime(long time){
+        //time is in seconds
+        boolean check = false;
+        // TODO: 5/29/18 Alter this for demo (%60 instead of /60)
+        long minutes = (time/60);
+        if(minutes==gameLength){
+            check = true;
+        }
+        return check;
     }
 
 
+    //Notification logic
+
+    public void substitutionNotification()
+    {
+        notificationID++;
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this,"1")
+                .setSmallIcon(android.R.color.transparent)
+                .setContentTitle("Substitute")
+                .setContentText("In: "+ match.getSubstitutions().get(0).getIn().get(0).getName() + ", "
+                        + match.getSubstitutions().get(0).getIn().get(1).getName()
+                        + ", Out: "+ match.getSubstitutions().get(0).getOut().get(0).getName() + ", "
+                        + match.getSubstitutions().get(0).getOut().get(1).getName())
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+// notificationId is a unique int for each notification that you must define
+        notificationManager.notify(notificationID, mBuilder.build());
+
+    }
+
+ 
 }
 
 

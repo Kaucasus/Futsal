@@ -1,6 +1,9 @@
 package be.kuleuven.softdev.jordi.futsal.classes;
 
-public class Score {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Score implements Parcelable {
     private int home;
     private int out;
     private long timestamp;
@@ -12,6 +15,8 @@ public class Score {
     }
 
     //Getters and setters
+
+
 
     public int getHome() {
         return home;
@@ -51,4 +56,34 @@ public class Score {
         return string.toString();
     }
 
+    @Override
+    public int describeContents() {
+        return hashCode();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(home);
+        dest.writeInt(out);
+        dest.writeLong(timestamp);
+    }
+
+    //Parcelable
+    protected Score(Parcel in) {
+        home = in.readInt();
+        out = in.readInt();
+        timestamp = in.readLong();
+    }
+
+    public static final Creator<Score> CREATOR = new Creator<Score>() {
+        @Override
+        public Score createFromParcel(Parcel in) {
+            return new Score(in);
+        }
+
+        @Override
+        public Score[] newArray(int size) {
+            return new Score[size];
+        }
+    };
 }

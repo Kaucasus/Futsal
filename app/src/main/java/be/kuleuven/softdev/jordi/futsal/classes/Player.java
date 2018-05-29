@@ -1,10 +1,16 @@
 package be.kuleuven.softdev.jordi.futsal.classes;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Player {
+public class Player implements Parcelable{
+    //Implements Parcelable so you can put arrayList in intent
+
     private String name;
-    private int playTime;
+    //playTime in seconds
+    private long playTime;
+
 
     public Player(String name)
     {
@@ -12,22 +18,22 @@ public class Player {
         playTime = 0;
     }
 
+
+
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void incrementPlayTime()
+    public void addPlayTime(long addedTime)
     {
-        playTime++;
+        playTime+= addedTime;
     }
 
-    public int getPlayTime(){
+    public long getPlayTime(){
         return playTime;
     }
+
+    //Overrides equals and Hashcode to see which players are the longest on the field.
 
     @Override
     public boolean equals(Object o) {
@@ -45,4 +51,41 @@ public class Player {
         result = 31 * result + name.hashCode();
         return result;
     }
+
+    @Override
+    public int describeContents() {
+        //Uses hashcode to know what the content is
+        return hashCode();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        //Object serialization/flattening.
+        dest.writeString(name);
+        dest.writeLong(playTime);
+    }
+
+    //Helper class that implements ParcelCreator
+        protected Player(Parcel in) {
+        /*
+        * Reconstruct from the parcel
+        * */
+            name = in.readString();
+            playTime = in.readLong();
+        }
+
+        public static final Creator<Player> CREATOR = new Creator<Player>() {
+        /*
+        * This is required to "unmarshal" data stored in a Parcel
+        * */
+            @Override
+            public Player createFromParcel(Parcel in) {
+                return new Player(in);
+            }
+
+            @Override
+            public Player[] newArray(int size) {
+                return new Player[size];
+            }
+        };
 }

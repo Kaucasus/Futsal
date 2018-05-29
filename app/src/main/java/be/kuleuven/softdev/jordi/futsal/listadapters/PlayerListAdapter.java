@@ -1,6 +1,10 @@
 package be.kuleuven.softdev.jordi.futsal.listadapters;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +13,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import be.kuleuven.softdev.jordi.futsal.R;
+import be.kuleuven.softdev.jordi.futsal.classes.Player;
 
 
 public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.PlayerViewHolder> {
-    private ArrayList<String> mDataset;
+    private ArrayList<Player> mDataset;
+    private Context mContext;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -28,8 +34,11 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Pl
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public PlayerListAdapter(ArrayList<String> myDataset) {
+    public PlayerListAdapter(Context context, ArrayList<Player> myDataset) {
+        mContext = context;
         mDataset = myDataset;
+        Log.d("PlayerListAdapter",
+                "First thing: "+(myDataset == null || myDataset.size() <1 ? "null" :myDataset.get(0).getName()));
     }
 
 
@@ -38,7 +47,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Pl
     public void onBindViewHolder(PlayerViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        String playerName = mDataset.get(position);
+        String playerName = mDataset.get(position).getName();
         holder.playerText.setText(playerName);
 
     }
@@ -50,6 +59,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Pl
     }
 
     // Create new views (invoked by the layout manager)
+    @NonNull
     @Override
     public PlayerViewHolder onCreateViewHolder(ViewGroup parent,
                                          int viewType) {

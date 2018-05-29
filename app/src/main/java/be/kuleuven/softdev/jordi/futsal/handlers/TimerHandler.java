@@ -1,32 +1,43 @@
 package be.kuleuven.softdev.jordi.futsal.handlers;
 
-import android.app.Activity;
-import android.content.Context;
+
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
-
-import be.kuleuven.softdev.jordi.futsal.HandlerTest;
+import be.kuleuven.softdev.jordi.futsal.ActiveMatch;
 
 public final class TimerHandler extends Handler{
-
-    final HandlerTest ht;
+    final ActiveMatch am;
 
     public final static int DO_UPDATE_TIMER = 0;
     public final static int DO_TOGGLE_TIMER = 1;
     private long time;
     private boolean paused;
+    private boolean notificationFired;
 
 
-    public TimerHandler(HandlerTest ht)
+
+    public TimerHandler(ActiveMatch ht)
     {
-        this.ht = ht;
+        this.am = ht;
         time=0;
+        paused = true;
+        notificationFired = false;
+    }
+
+    //Overloaded constructor to make the on Saved Instance state possible
+    public TimerHandler(ActiveMatch ht,long startTime)
+    {
+        this.am = ht;
+        time=startTime;
         paused = false;
+        notificationFired = false;
     }
 
 
+    public void setNotificationFired(boolean notificationFired) {
+        this.notificationFired = notificationFired;
+    }
 
     @Override
     public void handleMessage(Message msg) {
@@ -35,10 +46,27 @@ public final class TimerHandler extends Handler{
         switch (msg.what){
             case DO_UPDATE_TIMER:
                 if(!paused){
-                Log.d("TimerExample","going for: "+(time));
-                updateUITimer(time);
-                time++;
-                sendEmptyMessageDelayed(TimerHandler.DO_UPDATE_TIMER,1000);
+                    Log.d("TimerExample","going for: "+(time));
+                    updateUITimer(time);
+                    time++;
+
+                    if(am.checkHalfTime(time))
+                    {
+                        am.halftime();
+                        paused = true;
+                    }else if(am.checkFullTime(time))
+                    {
+                        paused = true;
+                        am.endGame();
+                    }
+
+                    if(am.checkTimeSubstitution(time) && !notificationFired){
+                        Log.d("TimeSubReached","firing notification");
+                        notificationFired = true;
+                        am.substitutionNotification();
+                    }
+
+                    sendEmptyMessageDelayed(TimerHandler.DO_UPDATE_TIMER,1000);
                 }
                 break;
 
@@ -62,22 +90,27 @@ public final class TimerHandler extends Handler{
     {
         //get a long that represents the time since the app has been running.
         String timeString = ((time/60) % 60 )+ " : " + (time%60);
-        ht.updateUI(timeString);
+        am.updateUI(timeString);
+
     }
+
+    //Getters and setters
 
     public long getTime()
     {
         return (time);
     }
 
-    //1 log gewoon elke seconde de tijd in Log.d
-    //todo
-    /*
-    ook als de app aan het sleepen is
+    public boolean isPaused() {
+        return paused;
+    }
 
+//    ook als de app aan het sleepen is
+//    1 log gewoon elke seconde de tijd in Log.d
+//
+//
+//    daarna als de handler gestart wordt, geef je de activity mee
+//    dan op die referentie functies oproepen uit
 
-    daarna als de handler gestart wordt, geef je de activity mee
-    dan op die referentie functies oproepen uit
-     */
 
 }

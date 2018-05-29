@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--Todo Beautify and add a way to see all the different kind of apps-->
-<!--Todo make a menu that slides out to the left for easy navigation-->
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -14,6 +12,7 @@
         android:orientation="vertical"
         android:padding="15dp">
 
+<!--TODO: rename these strings-->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,14 +30,18 @@
             android:layout_margin="15dp"
             android:padding="15dp"
             android:text="@string/start"
-            android:id="@+id/startButton"
             android:onClick="start"
             />
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="HandlerTest"
-            android:onClick="handlerTest"/>
+            android:layout_margin="15dp"
+            android:padding="15dp"
+            android:text="Test"
+            android:onClick="test"
+            />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

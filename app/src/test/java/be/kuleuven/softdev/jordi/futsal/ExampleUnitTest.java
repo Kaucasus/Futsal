@@ -1,11 +1,10 @@
 package be.kuleuven.softdev.jordi.futsal;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
 
-import be.kuleuven.softdev.jordi.futsal.classes.Field;
+import be.kuleuven.softdev.jordi.futsal.classes.Match;
 import be.kuleuven.softdev.jordi.futsal.classes.Player;
 import be.kuleuven.softdev.jordi.futsal.classes.Substitution;
 
@@ -26,7 +25,7 @@ public class ExampleUnitTest {
     public void FieldTest() {
         //8 players
 
-        //Create an ArrayList of 8 players for field
+        //Create an ArrayList of 8 players for match
         ArrayList<String> SampleArray = new ArrayList<>();
         SampleArray.add(("a"));
         SampleArray.add(("b"));
@@ -40,11 +39,11 @@ public class ExampleUnitTest {
         ArrayList<Substitution> substitutions = new ArrayList<>();
 
 
-        Field veld = new Field(SampleArray,50,5);
+        Match veld = new Match(SampleArray,50,5);
         veld.generateSubstitutions();
 
-        int lowest = Integer.MAX_VALUE;
-        int highest = Integer.MIN_VALUE;
+        long lowest = Integer.MAX_VALUE;
+        long highest = Integer.MIN_VALUE;
 
         ArrayList<Player> spelers = new ArrayList<>();
         spelers.addAll(veld.getBenchPlayers());
@@ -65,7 +64,7 @@ public class ExampleUnitTest {
         assert(lowest > highest-2);
 
         //7 players
-        //Create an ArrayList of 7 players for field
+        //Create an ArrayList of 7 players for match
         ArrayList<String> SampleArray7 = new ArrayList<>();
         SampleArray7.add(("a"));
         SampleArray7.add(("b"));
@@ -79,11 +78,11 @@ public class ExampleUnitTest {
         ArrayList<Substitution> substitutions7 = new ArrayList<>();
 
 
-        Field veld7 = new Field(SampleArray,50,5);
+        Match veld7 = new Match(SampleArray,50,5);
         veld.generateSubstitutions();
 
-        int lowest7 = Integer.MAX_VALUE;
-        int highest7 = Integer.MIN_VALUE;
+        long lowest7 = Integer.MAX_VALUE;
+        long highest7 = Integer.MIN_VALUE;
 
         ArrayList<Player> spelers7 = new ArrayList<>();
         spelers7.addAll(veld.getBenchPlayers());

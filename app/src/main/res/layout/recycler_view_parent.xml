@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="IN"
+            android:layout_gravity="center"/>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerview_parent1">
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Out"
+            android:layout_gravity="center"/>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerview_parent2">
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:text="TEST"
+        android:id="@+id/testID"/>
+
+</LinearLayout>
