@@ -3,6 +3,8 @@ package be.kuleuven.softdev.jordi.futsal.listadapters;
 import android.view.View;
 import android.widget.AdapterView;
 
+import be.kuleuven.softdev.jordi.futsal.classes.Player;
+
 public class SpinnerItemClickListener implements AdapterView.OnItemSelectedListener{
 
     @Override

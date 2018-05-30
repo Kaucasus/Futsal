@@ -2,6 +2,7 @@ package be.kuleuven.softdev.jordi.futsal;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AlertDialog;
@@ -11,15 +12,18 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import be.kuleuven.softdev.jordi.futsal.classes.Goal;
 import be.kuleuven.softdev.jordi.futsal.classes.Match;
 import be.kuleuven.softdev.jordi.futsal.classes.Player;
+import be.kuleuven.softdev.jordi.futsal.fragments.AlertDialogGoal;
 import be.kuleuven.softdev.jordi.futsal.handlers.TimerHandler;
 import be.kuleuven.softdev.jordi.futsal.listadapters.RecyclerItemClickListener;
 import be.kuleuven.softdev.jordi.futsal.listadapters.SpinnerItemClickListener;
@@ -119,13 +123,32 @@ public class ActiveMatch extends AppCompatActivity {
         if(!th.isPaused()) {
             // TODO: 5/29/18 pick players who scored via spinner
 
+/*            DialogFragment newFragment = new AlertDialogGoal();
+            Bundle data = new Bundle();
+            data.putParcelableArrayList("players",match.getFieldPlayers());
 
-            //AlertDialog:
+            newFragment.setArguments(data);
+            newFragment.show(getSupportFragmentManager(),"goal select");*/
+
+//AlertDialog:
             LayoutInflater li = getLayoutInflater();
             View alertLayout = li.inflate(R.layout.alert_dialog_goal_scored, null);
-            final Spinner goalmaker = alertLayout.findViewById(R.id.goalmaker_spinner);
+
+            ArrayList<Player> goalmakers = match.getFieldPlayers();
+            ArrayList<Player> assisters = match.getFieldPlayers();
+
+            Spinner goalmaker = alertLayout.findViewById(R.id.goalmaker_spinner);
+            ArrayAdapter<Player> gmAdapter = new ArrayAdapter<Player>(getApplicationContext()
+                    ,  android.R.layout.simple_spinner_item,goalmakers);
+            gmAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            goalmaker.setAdapter(gmAdapter);
             goalmaker.setOnItemSelectedListener(new SpinnerItemClickListener());
-            final Spinner assister = alertLayout.findViewById(R.id.assister_spinner);
+
+            Spinner assister = alertLayout.findViewById(R.id.assister_spinner);
+            ArrayAdapter<Player> assistAdapter = new ArrayAdapter<Player>(getApplicationContext()
+                    ,  android.R.layout.simple_spinner_item, assisters);
+            assistAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            assister.setAdapter(assistAdapter);
             assister.setOnItemSelectedListener(new SpinnerItemClickListener());
 
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -145,12 +168,13 @@ public class ActiveMatch extends AppCompatActivity {
                     match.updateScore(true, th.getTime());
                     match.addGoal(new Goal(match.getFieldPlayers().get(0), match.getFieldPlayers().get(1)
                             , th.getTime(), match.getScore()));
+
+                    TextView mScoreBoard = (TextView) findViewById(R.id.scoreboard);
+                    mScoreBoard.setText(match.getScore().scoreBoardString());
                 }
             });
             AlertDialog dialog = alert.create();
             dialog.show();
-
-
             TextView mScoreBoard = (TextView) findViewById(R.id.scoreboard);
             mScoreBoard.setText(match.getScore().scoreBoardString());
         }
@@ -205,7 +229,7 @@ public class ActiveMatch extends AppCompatActivity {
         //time is in seconds
         boolean check = false;
         // TODO: 5/29/18 alter this for  demo (%60 instead of /60)
-        long minutes = (time/60);
+        long minutes = (time%60);
 
         if(match.getSubstitutions().size()>0 && match.getSubstitutions().get(0).getTime() < minutes)
         {
@@ -220,7 +244,7 @@ public class ActiveMatch extends AppCompatActivity {
         //time is in seconds
         boolean check = false;
         // TODO: 5/29/18 Alter this for demo (%60 instead of /60)
-        long minutes = (time/60);
+        long minutes = (time%60);
         if(minutes==gameLength/2){
             check = true;
         }
@@ -231,7 +255,7 @@ public class ActiveMatch extends AppCompatActivity {
         //time is in seconds
         boolean check = false;
         // TODO: 5/29/18 Alter this for demo (%60 instead of /60)
-        long minutes = (time/60);
+        long minutes = (time%60);
         if(minutes==gameLength){
             check = true;
         }
@@ -261,7 +285,16 @@ public class ActiveMatch extends AppCompatActivity {
 
     }
 
- 
+
+/*    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+
+    }*/
 }
 
 

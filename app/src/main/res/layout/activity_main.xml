@@ -33,14 +33,6 @@
             android:onClick="start"
             />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="15dp"
-            android:padding="15dp"
-            android:text="Test"
-            android:onClick="test"
-            />
 
     </LinearLayout>
 

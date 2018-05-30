@@ -19,7 +19,6 @@
         <activity android:name=".ActiveMatch" />
         <activity android:name=".AddPlayers" />
         <activity android:name=".Statistics" />
-        <activity android:name=".testActivity"></activity>
     </application>
 
 </manifest>

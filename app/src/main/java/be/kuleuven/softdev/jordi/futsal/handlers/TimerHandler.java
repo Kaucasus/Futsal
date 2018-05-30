@@ -66,7 +66,9 @@ public final class TimerHandler extends Handler{
                         am.substitutionNotification();
                     }
 
-                    sendEmptyMessageDelayed(TimerHandler.DO_UPDATE_TIMER,1000);
+                    //A bit slower then 1000 ms because the thing above takes some time
+
+                    sendEmptyMessageDelayed(TimerHandler.DO_UPDATE_TIMER,950);
                 }
                 break;
 

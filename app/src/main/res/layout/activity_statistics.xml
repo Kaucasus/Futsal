@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Statistics"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:onClick="goBackToHome">
 
     <TextView
         android:layout_width="match_parent"

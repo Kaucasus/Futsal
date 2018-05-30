@@ -33,6 +33,14 @@ public class Player implements Parcelable{
         return playTime;
     }
 
+
+    //Override to String for implementation in Spinner
+    @Override
+    public String toString() {
+        return name;
+    }
+
+
     //Overrides equals and Hashcode to see which players are the longest on the field.
 
     @Override
