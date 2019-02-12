@@ -1,4 +1,5 @@
 package be.kuleuven.softdev.jordi.futsal.handlers;
+// TODO: 2/12/19 Check if time code is all in seconds
 
 
 import android.os.Handler;

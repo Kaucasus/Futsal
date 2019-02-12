@@ -228,8 +228,7 @@ public class ActiveMatch extends AppCompatActivity {
     {
         //time is in seconds
         boolean check = false;
-        // TODO: 5/29/18 alter this for  demo (%60 instead of /60)
-        long minutes = (time%60);
+        long minutes = (time/60);
 
         if(match.getSubstitutions().size()>0 && match.getSubstitutions().get(0).getTime() < minutes)
         {
@@ -243,8 +242,7 @@ public class ActiveMatch extends AppCompatActivity {
     {
         //time is in seconds
         boolean check = false;
-        // TODO: 5/29/18 Alter this for demo (%60 instead of /60)
-        long minutes = (time%60);
+        long minutes = (time/60);
         if(minutes==gameLength/2){
             check = true;
         }
@@ -254,8 +252,7 @@ public class ActiveMatch extends AppCompatActivity {
     public boolean checkFullTime(long time){
         //time is in seconds
         boolean check = false;
-        // TODO: 5/29/18 Alter this for demo (%60 instead of /60)
-        long minutes = (time%60);
+        long minutes = (time/60);
         if(minutes==gameLength){
             check = true;
         }
@@ -264,7 +261,7 @@ public class ActiveMatch extends AppCompatActivity {
 
 
     //Notification logic
-
+// TODO: 2/12/19 Make sure this works with multiple people 
     public void substitutionNotification()
     {
         notificationID++;
