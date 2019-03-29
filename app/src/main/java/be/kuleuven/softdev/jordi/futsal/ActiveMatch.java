@@ -1,5 +1,6 @@
 package be.kuleuven.softdev.jordi.futsal;
 
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.DialogFragment;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -30,6 +32,8 @@ import be.kuleuven.softdev.jordi.futsal.listadapters.SpinnerItemClickListener;
 import be.kuleuven.softdev.jordi.futsal.listadapters.SubstitutionListAdapter;
 
 public class ActiveMatch extends AppCompatActivity {
+    private static final String TAG = "Active Match";
+
     Match match;
     int gameLength = 50;
     int subLength = 5;
@@ -49,6 +53,7 @@ public class ActiveMatch extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_active_match);
         Intent intent = getIntent();
+        Log.d(TAG, "onCreate: Started intent unwrapping");
 
         //get the players selected in previous screen
         ArrayList<Player> playerList;
@@ -106,11 +111,12 @@ public class ActiveMatch extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new SubstitutionListAdapter(match.getSubstitutions());
+        mAdapter = new SubstitutionListAdapter(match.getSubstitutions(),this);
         mRecyclerView.setAdapter(mAdapter);
 
         //give the notification ID
         notificationID = 0;
+        Log.d(TAG, "onCreate: Finished Oncreate without errors");
     }
 
     @Override
@@ -261,17 +267,16 @@ public class ActiveMatch extends AppCompatActivity {
 
 
     //Notification logic
-// TODO: 2/12/19 Make sure this works with multiple people 
+    //TODO: Make sure Notifications follow all guidelines
+
     public void substitutionNotification()
     {
         notificationID++;
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this,"1")
                 .setSmallIcon(android.R.color.transparent)
                 .setContentTitle("Substitute")
-                .setContentText("In: "+ match.getSubstitutions().get(0).getIn().get(0).getName() + ", "
-                        + match.getSubstitutions().get(0).getIn().get(1).getName()
-                        + ", Out: "+ match.getSubstitutions().get(0).getOut().get(0).getName() + ", "
-                        + match.getSubstitutions().get(0).getOut().get(1).getName())
+                .setContentText("In: "+ match.getSubstitutions().get(0).inToString()
+                        + ", Out: "+ match.getSubstitutions().get(0).outToString() +".")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
 

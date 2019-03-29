@@ -50,7 +50,7 @@ public class AddPlayers extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new PlayerListAdapter(this,playerList);
+        mAdapter = new PlayerListAdapter(playerList);
         mRecyclerView.setAdapter(mAdapter);
 
     }
@@ -123,7 +123,7 @@ public class AddPlayers extends AppCompatActivity {
     }
 
     public void addExistingPlayer(View view) {
-
+        // TODO: 3/24/19 Add the builder so that you can add multiple players at a time
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
         builder.setTitle("pick a player")
                 .setItems(R.array.known_players, new DialogInterface.OnClickListener() {

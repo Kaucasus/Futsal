@@ -1,4 +1,5 @@
 package be.kuleuven.softdev.jordi.futsal;
+//TODO: Make sure notifications follow all guidelines
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -8,7 +9,13 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+
+import java.util.ArrayList;
+
+import be.kuleuven.softdev.jordi.futsal.classes.Player;
+
 
 import static android.os.Build.VERSION.SDK_INT;
 
@@ -43,6 +50,25 @@ public class MainActivity extends AppCompatActivity {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    public void testStart(View view) {
+        // TODO: 3/24/19 Delete this for build 
+        Intent intent = new Intent(this, ActiveMatch.class);
+        ArrayList<Player> playerList= new ArrayList<>();
+
+        playerList.add(new Player("Jordi"));
+        playerList.add(new Player("Sandro"));
+        playerList.add(new Player("Ruben"));
+        playerList.add(new Player("Milo"));
+        playerList.add(new Player("Arthur"));
+        playerList.add(new Player("Floris"));
+        playerList.add(new Player("Robin"));
+
+        intent.putParcelableArrayListExtra("playerList",playerList);
+        startActivity(intent);
+        Log.d("MyActivity", "testStart: Successfully ended mainactivity");
+        finish();
     }
 
 }

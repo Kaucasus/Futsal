@@ -28,4 +28,25 @@ public class Substitution {
     {
         return time;
     }
+
+    public String inToString(){
+        String inPlayers = "";
+        for (Player player: in
+             ) {
+            inPlayers += player.getName();
+            inPlayers += " ";
+        }
+        return inPlayers;
+
+    }
+
+    public  String outToString(){
+        String outPlayers = "";
+        for (Player player: out
+                ) {
+            outPlayers += player.getName();
+            outPlayers += " ";
+        }
+        return outPlayers;
+    }
 }

@@ -1,5 +1,7 @@
 package be.kuleuven.softdev.jordi.futsal.listadapters;
 
+import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,42 +16,47 @@ import be.kuleuven.softdev.jordi.futsal.classes.Substitution;
 public class SubstitutionListAdapter extends
         RecyclerView.Adapter<SubstitutionListAdapter.SubstitionViewHolder> {
     private ArrayList<Substitution> substitutions;
+    private Context context;
 
-    /**
-     * View holder class
-     * */
-    // TODO: add a way for multiple substitutes (not implemented)
+    // DONE: add a way for multiple substitutes (not implemented)
     public class SubstitionViewHolder extends RecyclerView.ViewHolder {
-        public TextView inText1;
-        public TextView inText2;
-        public TextView outText1;
-        public TextView outText2;
         public TextView timeText;
+        public RecyclerView inRecyclerView;
+        public RecyclerView outRecyclerView;
 
         public SubstitionViewHolder(View view) {
             super(view);
-            inText1 = (TextView) view.findViewById(R.id.in_1);
-            inText2 = (TextView) view.findViewById(R.id.in_2);
-            outText1 = (TextView) view.findViewById(R.id.out_1);
-            outText2 = (TextView) view.findViewById(R.id.out_2);
+            inRecyclerView = (RecyclerView) view.findViewById(R.id.player_in_recyclerview);
+            outRecyclerView = (RecyclerView) view.findViewById(R.id.player_out_recyclerview);
             timeText = (TextView) view.findViewById(R.id.time);
-
-
         }
     }
 
-    public SubstitutionListAdapter(ArrayList<Substitution> substitutions) {
+
+    public SubstitutionListAdapter(ArrayList<Substitution> substitutions, Context context) {
         this.substitutions= substitutions;
+        this.context = context;
     }
 
     @Override
     public void onBindViewHolder(SubstitionViewHolder holder, int position) {
         Substitution substitution = substitutions.get(position);
-        holder.inText1.setText(substitution.getIn().get(0).getName());
-        holder.inText2.setText(substitution.getIn().get(1).getName());
-        holder.outText1.setText(substitution.getOut().get(0).getName());
-        holder.outText2.setText(substitution.getOut().get(1).getName());
         holder.timeText.setText(String.valueOf(substitution.getTime()));
+
+        //Child Recyclerview Setup
+        //In
+        PlayerListAdapter inPlayerAdapter = new PlayerListAdapter(substitutions.get(position).getIn());
+        holder.inRecyclerView.setAdapter(inPlayerAdapter);
+        holder.inRecyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager inLayoutManager = new LinearLayoutManager(context);
+        holder.inRecyclerView.setLayoutManager(inLayoutManager);
+        //Out
+        PlayerListAdapter outPlayerAdapter = new PlayerListAdapter(substitutions.get(position).getOut());
+        holder.outRecyclerView.setAdapter(outPlayerAdapter);
+        holder.outRecyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager outLayoutManager = new LinearLayoutManager(context);
+        holder.outRecyclerView.setLayoutManager(outLayoutManager);
+
     }
 
     @Override
