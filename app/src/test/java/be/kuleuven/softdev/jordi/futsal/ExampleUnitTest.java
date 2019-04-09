@@ -109,7 +109,7 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void playerComparatorTest(){
+    public void generateMatchSubstitutionsTest(){
         ArrayList<Player> players = generatePlayerArrayList(6);
         ArrayList<Substitution> substitutions;
         Match match = new Match(players);
@@ -121,6 +121,7 @@ public class ExampleUnitTest {
         assertNotNull(match.getFieldPlayers());
 
         substitutions = match.getFutureSubstitutions();
+        System.out.println("-------------------------- TEST --------------------");
         for (Substitution sub :substitutions
                 ) {
             System.out.println("in: " + sub.inToString());

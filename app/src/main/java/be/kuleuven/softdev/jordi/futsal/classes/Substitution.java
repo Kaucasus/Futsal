@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class Substitution {
 
-    private ArrayList<Player> in;
-    private ArrayList<Player> out;
-    private int time;
+    private  ArrayList<Player> in;
+    private  ArrayList<Player> out;
+    private long time;
 
-    public Substitution( ArrayList<Player> in, ArrayList<Player> out, int subTime) {
+    public Substitution( ArrayList<Player> in, ArrayList<Player> out, long subTime) {
 
         this.in = in;
         this.out = out;
@@ -24,7 +24,7 @@ public class Substitution {
         return out;
     }
 
-    public int getTime()
+    public long getTime()
     {
         return time;
     }

@@ -1,10 +1,15 @@
 package be.kuleuven.softdev.jordi.futsal.classes;
+import android.util.Log;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
+import static android.content.ContentValues.TAG;
 import static java.lang.Math.floor;
 //Todo FIX PLAYER ALGORITHM!!!
 
@@ -151,7 +156,7 @@ public class Match {
             int subAmount = (int) floor((gameLength / subLength) - 1);
 
             for (int i = 0; i < subAmount; i++) {
-                int time = (i + 1) *(int) (subLength/60);
+                long time = (i+1)*subLength;
                 ArrayList<Player> in;
                 ArrayList<Player> out;
 
@@ -165,7 +170,10 @@ public class Match {
 
                 Substitution substitution = new Substitution(in, out, time);
                 substitutions.add(substitution);
+                Log.d(TAG,"generateSubstitutions: added substitution:" +
+                        substitution.inToString() + "; " + substitution.outToString());
                 substitute(substitution, fieldPlayers,benchPlayers);
+
 
 
             }
@@ -174,26 +182,38 @@ public class Match {
         return substitutions;
     }
 
-    private void substitute(Substitution substitution, ArrayList<Player> fieldPlayers
-            , ArrayList<Player> benchPlayers) {
+    private void substitute(Substitution substitution, ArrayList<Player> currentPlayers
+            , ArrayList<Player> swapPlayers) {
 
-        ArrayList<Player> subIn = substitution.getIn();
-        //you need to deepcopy the Players so that the reference to the substitutions don't get lost!
-        ArrayList<Player> subOut = substitution.getOut();
+        //make in and out array from subs
+        Player subInArray[] = new Player[substitution.getIn().size()];
+        substitution.getIn().toArray(subInArray);
+
+        Player subOutArray[] = new Player[substitution.getOut().size()];
+        substitution.getOut().toArray(subOutArray);
+
 
         //Add outgoingplayers to bench, add incomingplayers to field
-        benchPlayers.addAll(subOut);
-        fieldPlayers.addAll(subIn);
+        for (Player playerIn: subInArray
+             ) {
+            currentPlayers.add(playerIn);
+        }
+
+        for (Player playerOut: subOutArray){
+            swapPlayers.add(playerOut);
+
+        }
 
 
-        Iterator<Player> fieldIt = fieldPlayers.iterator();
-        Iterator<Player> benchIt = benchPlayers.iterator();
+
+        Iterator<Player> fieldIt = currentPlayers.iterator();
+        Iterator<Player> benchIt = swapPlayers.iterator();
         //Delete all incoming players from bench
         while (benchIt.hasNext()) {
 
             Player currentPlayer = benchIt.next();
 
-            if (fieldPlayers.contains(currentPlayer)) {
+            if (Arrays.asList(subInArray).contains(currentPlayer)) {
                 benchIt.remove();
             }
 
@@ -204,7 +224,7 @@ public class Match {
 
             Player currentPlayer = fieldIt.next();
 
-            if ( benchPlayers.contains(currentPlayer)) {
+            if ( Arrays.asList(subOutArray).contains(currentPlayer)) {
                 fieldIt.remove();
             }
         }
