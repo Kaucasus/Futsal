@@ -14,7 +14,8 @@
     <string name="opponent_team_goal_add">opponent</string>
     <string name="add_substitution">Add sub</string>
     <string name="timer_start_prompt">Click to start</string>
-    <string name="channel_name">substitutions</string>
+    <string name="channel_name">futureSubstitutions</string>
     <string name="channel_description">Get notifications when a substitute should happen</string>
+
 
 </resources>

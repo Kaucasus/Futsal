@@ -1,5 +1,7 @@
 package be.kuleuven.softdev.jordi.futsal;
 //TODO: Make sure notifications follow all guidelines
+//TODO: Make Cardview For matches
+//TODO: Implement Room
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -58,12 +60,12 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Player> playerList= new ArrayList<>();
 
         playerList.add(new Player("Jordi"));
-        playerList.add(new Player("Sandro"));
-        playerList.add(new Player("Ruben"));
-        playerList.add(new Player("Milo"));
         playerList.add(new Player("Arthur"));
         playerList.add(new Player("Floris"));
+        playerList.add(new Player("Milo"));
+        playerList.add(new Player("Jonas"));
         playerList.add(new Player("Robin"));
+        playerList.add(new Player("Jannes"));
 
         intent.putParcelableArrayListExtra("playerList",playerList);
         startActivity(intent);

@@ -24,7 +24,8 @@
         android:layout_margin="15dp"
         android:id="@+id/scoreboard"
         android:gravity="center"
-        android:textSize="24sp"/>
+        android:textSize="24sp"
+        android:onClick="forceEndGame"/>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -29,6 +29,24 @@ public class Substitution {
         return time;
     }
 
+    public ArrayList<String> inToStringList(){
+        ArrayList<String> list = new ArrayList<>();
+        for (Player player: in
+             ) {
+            list.add(player.getName());
+        }
+        return list;
+    }
+
+    public ArrayList<String> outToStringList(){
+        ArrayList<String> list = new ArrayList<>();
+        for (Player player: out
+                ) {
+            list.add(player.getName());
+        }
+        return list;
+    }
+
     public String inToString(){
         String inPlayers = "";
         for (Player player: in

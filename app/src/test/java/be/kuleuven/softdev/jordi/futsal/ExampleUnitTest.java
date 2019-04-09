@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+
 import be.kuleuven.softdev.jordi.futsal.classes.Match;
 import be.kuleuven.softdev.jordi.futsal.classes.Player;
 import be.kuleuven.softdev.jordi.futsal.classes.Substitution;
@@ -22,26 +23,25 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void FieldTest() {
+    public void substitutionTest() {
         //8 players
 
         //Create an ArrayList of 8 players for match
-        ArrayList<String> SampleArray = new ArrayList<>();
-        SampleArray.add(("a"));
-        SampleArray.add(("b"));
-        SampleArray.add(("c"));
-        SampleArray.add(("d"));
-        SampleArray.add(("e"));
-        SampleArray.add(("f"));
-        SampleArray.add(("g"));
-        SampleArray.add( ("h"));
+        ArrayList<Player> samplePlayers = new ArrayList<>();
+        samplePlayers.add(new Player("a"));
+        samplePlayers.add(new Player("b"));
+        samplePlayers.add(new Player("c"));
+        samplePlayers.add(new Player("d"));
+        samplePlayers.add(new Player("e"));
+        samplePlayers.add(new Player("f"));
+        samplePlayers.add(new Player("g"));
+        samplePlayers.add(new Player("h"));
 
         ArrayList<Substitution> substitutions = new ArrayList<>();
 
 
-        Match veld = new Match(SampleArray,50,5);
-        veld.generateSubstitutions();
-
+        Match veld = new Match(samplePlayers);
+        substitutions = veld.getFutureSubstitutions();
         long lowest = Integer.MAX_VALUE;
         long highest = Integer.MIN_VALUE;
 
@@ -78,8 +78,7 @@ public class ExampleUnitTest {
         ArrayList<Substitution> substitutions7 = new ArrayList<>();
 
 
-        Match veld7 = new Match(SampleArray,50,5);
-        veld.generateSubstitutions();
+        Match veld7 = new Match(samplePlayers);
 
         long lowest7 = Integer.MAX_VALUE;
         long highest7 = Integer.MIN_VALUE;
@@ -103,5 +102,44 @@ public class ExampleUnitTest {
 
         //6 players
         }
+
+    @Test
+    public void resumeMatchTest(){
+
+    }
+
+    @Test
+    public void playerComparatorTest(){
+        ArrayList<Player> players = generatePlayerArrayList(6);
+        ArrayList<Substitution> substitutions;
+        Match match = new Match(players);
+
+        ArrayList<Player> check = new ArrayList<>();
+        check.addAll(match.getBenchPlayers());
+
+        assertNotNull(check);
+        assertNotNull(match.getFieldPlayers());
+
+        substitutions = match.getFutureSubstitutions();
+        for (Substitution sub :substitutions
+                ) {
+            System.out.println("in: " + sub.inToString());
+            System.out.println("out: "+sub.outToString());
+        }
+        assert (substitutions.size()>5);
+    }
+
+    private ArrayList<Player> generatePlayerArrayList(int size){
+        ArrayList<Player> players = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            players.add(new Player(Integer.toString(i)));
+        }
+        return players;
+    }
+
+
+
+
+
 
 }

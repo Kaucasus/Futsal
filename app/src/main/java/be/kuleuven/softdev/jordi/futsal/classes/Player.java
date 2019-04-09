@@ -4,6 +4,10 @@ package be.kuleuven.softdev.jordi.futsal.classes;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 public class Player implements Parcelable{
     //Implements Parcelable so you can put arrayList in intent
 
@@ -35,6 +39,7 @@ public class Player implements Parcelable{
 
 
     //Override to String for implementation in Spinner
+    //Todo: see if this is still necessary
     @Override
     public String toString() {
         return name;

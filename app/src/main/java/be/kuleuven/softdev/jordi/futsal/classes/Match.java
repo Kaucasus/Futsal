@@ -2,25 +2,44 @@ package be.kuleuven.softdev.jordi.futsal.classes;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 
+import static java.lang.Math.floor;
+//Todo FIX PLAYER ALGORITHM!!!
+
 public class Match {
+    //General Match Information
+    private boolean active;
+    private Score score;
+    private String Opponents;
+    private Date date;
+
+    //Player and Field information
     private ArrayList<Player> fieldPlayers;
     private ArrayList<Player> benchPlayers;
+    private Player keeper;
+    private ArrayList<Substitution> futureSubstitutions;
     private ArrayList<Substitution> substitutions;
     private ArrayList<Goal> goals;
-    private int size;
 
-    //gameLength and subLength are in minutes
-    private int gameLength;
-    private int subLength;
-    private Score score;
+    //TODO Make settings page
+    //GameLength and Sublength should be settings, but for now are hardcoded in. They're in seconds
+    //(50 mins and 5 mins)/3000 s and 300 sec
+    //Substitution Amount should also be setting, but for now is hardcoded in as 2
+    //FieldPlayerSize should also be in setting (for games with more then 5 total players)
+    //But for now is hardcoded as 4
+    //extraPlayersMinin is the minimum extra players available before you go through with
+    // generating futureSubstitutions (should also be a setting)
+    private long gameLength = 5*60;
+    private long subLength = 5*6;
+    private int substitutionAmount = 2;
+    private int fieldPlayerSize = 4;
+    private int extraPlayersMin = 2;
 
 
-    public Match(ArrayList<Player> playerList, int gameLength, int subLength) {
-        this.gameLength = gameLength;
-        this.subLength = subLength;
-        size = playerList.size();
+
+    public Match(ArrayList<Player> playerList) {
         score = new Score(0,0,0);
 
         fieldPlayers = new ArrayList<>();
@@ -37,25 +56,22 @@ public class Match {
             benchPlayers.add(playerList.get(i));
         }
 
-        substitutions = generateSubstitutions(fieldPlayers,benchPlayers);
+        futureSubstitutions = generateSubstitutions(fieldPlayers,benchPlayers);
     }
 
     //overLoaded constructor for saved instance state recall.
     public Match(ArrayList<Player> fieldPlayers, ArrayList<Player> benchPlayers
-            , ArrayList<Substitution> substitutions, ArrayList<Goal> goals,
-                 Score score, int gameLength, int subLength) {
-        this.gameLength = gameLength;
-        this.subLength = subLength;
+            , ArrayList<Substitution> futureSubstitutions, ArrayList<Goal> goals,
+                 Score score) {
         this.score = score;
-        size = fieldPlayers.size() + benchPlayers.size();
 
         fieldPlayers = new ArrayList<>();
         benchPlayers = new ArrayList<>();
-        substitutions = new ArrayList<>();
+        futureSubstitutions = new ArrayList<>();
         goals = new ArrayList<>();
         this.fieldPlayers = fieldPlayers;
         this.benchPlayers = benchPlayers;
-        this.substitutions = substitutions;
+        this.futureSubstitutions = futureSubstitutions;
         this.goals = goals;
     }
 
@@ -69,8 +85,8 @@ public class Match {
         return benchPlayers;
     }
 
-    public ArrayList<Substitution> getSubstitutions() {
-        return substitutions;
+    public ArrayList<Substitution> getFutureSubstitutions() {
+        return futureSubstitutions;
 }
 
     public ArrayList<Goal> getGoals() {
@@ -93,8 +109,8 @@ public class Match {
     }
 
     public void substituteFirstSubstitution() {
-        substitute(substitutions.get(0),fieldPlayers,benchPlayers);
-        substitutions.remove(0);
+        substitute(futureSubstitutions.get(0),fieldPlayers,benchPlayers);
+        futureSubstitutions.remove(0);
     }
 
     public void addGoal(Goal goal){
@@ -103,10 +119,27 @@ public class Match {
         }
     }
 
-/*    public void generateNewSubstitutions(Substitution substitution)
+    public void endMatch(){
+        active = false;
+    }
+
+    public String toEmailReport(){
+        //TODO: pretty up the report
+        String report = "";
+        String nl = System.getProperty("line.separator");
+        report += "We:" + score.getHome() + " Opponents: " + score.getOut() +nl;
+        for (Goal goal: goals
+             ) {
+            report +=  "Scorer: " + goal.getScorer() + " Assister: " +goal.getAssister() + nl;
+        }
+
+        return report;
+    }
+
+    public void generateNewSubstitutions(Substitution substitution)
     {
         ;
-    }*/
+    }
 
     //Private helper Methods
     private ArrayList<Substitution> generateSubstitutions(ArrayList<Player> fieldPlayers
@@ -114,21 +147,21 @@ public class Match {
 
         ArrayList<Substitution> substitutions = new ArrayList<>();
 
-        if (size != fieldPlayers.size()) {
-            int subAmount = (gameLength / subLength) - 1;
+        if (fieldPlayerSize + extraPlayersMin <= fieldPlayers.size() + benchPlayers.size()) {
+            int subAmount = (int) floor((gameLength / subLength) - 1);
 
             for (int i = 0; i < subAmount; i++) {
-                int time = (i + 1) * subLength;
+                int time = (i + 1) *(int) (subLength/60);
                 ArrayList<Player> in;
                 ArrayList<Player> out;
 
                 //IncrementPlaytime
                 for (Player player : fieldPlayers) {
-                    player.addPlayTime(subLength*60);
+                    player.addPlayTime(subLength);
                 }
 
-                in = getPlayCount(2, benchPlayers, false);
-                out = getPlayCount(2, fieldPlayers, true);
+                in = getPlayCount(substitutionAmount, benchPlayers, false);
+                out = getPlayCount(substitutionAmount, fieldPlayers, true);
 
                 Substitution substitution = new Substitution(in, out, time);
                 substitutions.add(substitution);
@@ -145,29 +178,33 @@ public class Match {
             , ArrayList<Player> benchPlayers) {
 
         ArrayList<Player> subIn = substitution.getIn();
+        //you need to deepcopy the Players so that the reference to the substitutions don't get lost!
         ArrayList<Player> subOut = substitution.getOut();
 
+        //Add outgoingplayers to bench, add incomingplayers to field
         benchPlayers.addAll(subOut);
         fieldPlayers.addAll(subIn);
 
+
         Iterator<Player> fieldIt = fieldPlayers.iterator();
         Iterator<Player> benchIt = benchPlayers.iterator();
-
+        //Delete all incoming players from bench
         while (benchIt.hasNext()) {
 
             Player currentPlayer = benchIt.next();
 
-            if (subIn.contains(currentPlayer)) {
+            if (fieldPlayers.contains(currentPlayer)) {
                 benchIt.remove();
             }
 
         }
 
+        //Delete all outgoing players from field
         while (fieldIt.hasNext()) {
 
             Player currentPlayer = fieldIt.next();
 
-            if (subOut.contains(currentPlayer)) {
+            if ( benchPlayers.contains(currentPlayer)) {
                 fieldIt.remove();
             }
         }
@@ -185,7 +222,7 @@ public class Match {
             ArrayList<Player> copyList = new ArrayList<>(list);
 
             //Sorter
-            Collections.sort(copyList, new playerListComparator());
+            Collections.sort(copyList, new playerTimeComparator());
 
             if (out) {
                 Collections.reverse(copyList);
@@ -204,20 +241,19 @@ public class Match {
 
 // Additional helper classes
 
-    class playerListComparator implements Comparator<Player> {
+    class playerTimeComparator implements Comparator<Player> {
         @Override
         public int compare(Player o1, Player o2) {
             long time1 = o1.getPlayTime();
             long time2 = o2.getPlayTime();
 
+            //Is in this form and not long.compare since API call doesn't support it.
             if (time1 > time2) {
                 return 1;
             } else if (time1 < time2) {
                 return -1;
             } else {
                 return 0;
-
-
             }
         }
     }
