@@ -2,7 +2,6 @@
 <resources>
     <string-array
         name="known_players">
-        <item>Matthi</item>
         <item>Jordi</item>
         <item>Arthur</item>
         <item>Djonko</item>
@@ -14,6 +13,8 @@
         <item>Jonas B</item>
         <item>Ruben</item>
         <item>Jannes</item>
+        <item>Floris</item>
+
     </string-array>
 
 </resources>

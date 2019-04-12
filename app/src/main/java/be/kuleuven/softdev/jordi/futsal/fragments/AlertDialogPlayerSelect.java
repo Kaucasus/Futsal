@@ -4,12 +4,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-
-import java.util.ArrayList;
+import androidx.fragment.app.DialogFragment;
 
 import be.kuleuven.softdev.jordi.futsal.R;
-import be.kuleuven.softdev.jordi.futsal.classes.Player;
 
 public class AlertDialogPlayerSelect extends DialogFragment {
 
