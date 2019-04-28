@@ -17,6 +17,8 @@ import be.kuleuven.softdev.jordi.futsal.R;
 import be.kuleuven.softdev.jordi.futsal.classes.Player;
 
 public class PickPlayerDialogFragment extends DialogFragment {
+    //TODO: make sure the PickPlayerFragment works
+
 
     private PickPlayerDialogFragmentListener mListener;
     ArrayList<Integer> selectedItems;

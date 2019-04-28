@@ -36,8 +36,8 @@ public class Match {
     //But for now is hardcoded as 4
     //extraPlayersMinin is the minimum extra players available before you go through with
     // generating futureSubstitutions (should also be a setting)
-    private long gameLength = 5*60;
-    private long subLength = 5*6;
+    private long gameLength = 5*600;
+    private long subLength = 5*60;
     private int substitutionAmount = 2;
     private int fieldPlayerSize = 4;
     private int extraPlayersMin = 2;
@@ -156,7 +156,7 @@ public class Match {
             int subAmount = (int) floor((gameLength / subLength) - 1);
 
             for (int i = 0; i < subAmount; i++) {
-                long time = (i+1)*subLength;
+                long time = (i+1)*subLength/60;
                 ArrayList<Player> in;
                 ArrayList<Player> out;
 
@@ -170,6 +170,8 @@ public class Match {
 
                 Substitution substitution = new Substitution(in, out, time);
                 substitutions.add(substitution);
+                System.out.println("generateSubstitutions: added substitution: in: " +
+                        substitution.inToString() + "; out " + substitution.outToString());
                 Log.d(TAG,"generateSubstitutions: added substitution:" +
                         substitution.inToString() + "; " + substitution.outToString());
                 substitute(substitution, fieldPlayers,benchPlayers);
