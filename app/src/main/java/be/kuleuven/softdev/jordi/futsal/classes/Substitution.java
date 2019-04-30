@@ -8,11 +8,15 @@ public class Substitution {
     private  ArrayList<Player> out;
     private long time;
 
-    public Substitution( ArrayList<Player> in, ArrayList<Player> out, long subTime) {
+    public Substitution( ArrayList<Player> PlayerIn, ArrayList<Player> PlayerOut, long subTime) {
+        in = new ArrayList<>();
+        out = new ArrayList<>();
 
-        this.in = in;
-        this.out = out;
+        in.addAll(PlayerIn);
+        out.addAll(PlayerOut);
+
         time = subTime;
+
 
     }
 
