@@ -14,12 +14,14 @@ public class Player implements Parcelable{
     private String name;
     //playTime in seconds
     private long playTime;
+    private boolean justSwitched;
 
 
     public Player(String name)
     {
         this.name = name;
         playTime = 0;
+        justSwitched = false;
     }
 
 
@@ -37,6 +39,13 @@ public class Player implements Parcelable{
         return playTime;
     }
 
+    public boolean hasJustSwitched() {
+        return justSwitched;
+    }
+
+    public void setJustSwitched(boolean justSwitched) {
+        this.justSwitched = justSwitched;
+    }
 
     //Override to String for implementation in Spinner
     //Todo: see if this is still necessary

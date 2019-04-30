@@ -34,7 +34,7 @@ public class Match {
     //Substitution Amount should also be setting, but for now is hardcoded in as 2
     //FieldPlayerSize should also be in setting (for games with more then 5 total players)
     //But for now is hardcoded as 4
-    //extraPlayersMinin is the minimum extra players available before you go through with
+    //extraPlayersMin is the minimum extra players available before you go through with
     // generating futureSubstitutions (should also be a setting)
     private long gameLength = 5*600;
     private long subLength = 5*60;
@@ -165,8 +165,8 @@ public class Match {
                     player.addPlayTime(subLength);
                 }
 
-                in = getPlayCount(substitutionAmount, benchPlayers, false);
-                out = getPlayCount(substitutionAmount, fieldPlayers, true);
+                in = getPlayCount(substitutionAmount, benchPlayers, true);
+                out = getPlayCount(substitutionAmount, fieldPlayers, false);
 
                 Substitution substitution = new Substitution(in, out, time);
                 substitutions.add(substitution);
@@ -187,6 +187,10 @@ public class Match {
     private void substitute(Substitution substitution, ArrayList<Player> currentPlayers
             , ArrayList<Player> swapPlayers) {
 
+        for (Player inPlayer: currentPlayers) {
+            inPlayer.setJustSwitched(false);
+        }
+
         //make in and out array from subs
         Player subInArray[] = new Player[substitution.getIn().size()];
         substitution.getIn().toArray(subInArray);
@@ -198,6 +202,7 @@ public class Match {
         //Add outgoingplayers to bench, add incomingplayers to field
         for (Player playerIn: subInArray
              ) {
+            playerIn.setJustSwitched(true);
             currentPlayers.add(playerIn);
         }
 
@@ -234,7 +239,7 @@ public class Match {
     }
 
 
-    private ArrayList<Player> getPlayCount(int amount, ArrayList<Player> list, boolean out) {
+    private ArrayList<Player> getPlayCount(int amount, ArrayList<Player> list, boolean in) {
 
         if (amount >= list.size()) {
             return list;
@@ -246,7 +251,7 @@ public class Match {
             //Sorter
             Collections.sort(copyList, new playerTimeComparator());
 
-            if (out) {
+            if (in) {
                 Collections.reverse(copyList);
             }
 
@@ -271,11 +276,13 @@ public class Match {
 
             //Is in this form and not long.compare since API call doesn't support it.
             if (time1 > time2) {
-                return 1;
-            } else if (time1 < time2) {
                 return -1;
+            } else if (time1 < time2) {
+                return 1;
             } else {
-                return 0;
+                boolean justSwitched1 = o1.hasJustSwitched();
+                boolean justSwitched2 = o2.hasJustSwitched();
+                return  Boolean.valueOf(justSwitched1).compareTo(Boolean.valueOf(justSwitched2));
             }
         }
     }
